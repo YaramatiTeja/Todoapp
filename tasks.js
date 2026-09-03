@@ -46,23 +46,40 @@ let taskList = document.createElement("ul");
 taskList.classList.add("task-list");
 taskContainer.appendChild(taskList);
 
+let count = 0;
+let labelCount = 0;
 function createandAppendTodo(task){
     let todoItem = document.createElement("li");
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    checkbox.id = "task-checkbox-" + count;
+    count++;
     checkbox.classList.add("task-checkbox");
     todoItem.appendChild(checkbox);
 
     let labelElement = document.createElement("label");
     labelElement.textContent = task;
+    labelElement.id = "task-label-" + labelCount;
+    labelCount++;
     labelElement.classList.add("task-label");
+    labelElement.setAttribute("for", checkbox.id);
     todoItem.appendChild(labelElement);
     todoItem.classList.add("task-item");
     
+    let deleteButton = document.createElement("button");
     let deleteIcon = document.createElement("i");
-    deleteIcon.classList.add("far","far-trash-alt","delete-icon");
-    todoItem.appendChild(deleteIcon);
+    deleteIcon.classList.add("far","fa-trash-alt","delete-icon");
+    deleteButton.classList.add("delete-icon","button");
+    deleteButton.appendChild(deleteIcon);
+    todoItem.appendChild(deleteButton);
 
+     checkbox.addEventListener("click",function(){
+        strikeThroughTask(checkbox.id,labelElement.id);
+    });
+
+    deleteButton.addEventListener("click",function(){
+        deleteTask(checkbox.id,labelElement.id);
+    });
 
     taskList.appendChild(todoItem);
     taskInput.value = "";
@@ -72,4 +89,26 @@ function createandAppendTodo(task){
 buttonElement.addEventListener("click",function(){
     createandAppendTodo(taskInput.value);
 });
+
+
+function strikeThroughTask(checkboxId,labelId){
+    let checkbox = document.getElementById(checkboxId);
+    let labelElement = document.getElementById(labelId);
+    if(checkbox.checked){
+        labelElement.classList.add("checked");  
+    }
+    else {
+        labelElement.classList.remove("checked");
+    }
+}
+
+function deleteTask(checkboxId,labelId){
+    let checkbox = document.getElementById(checkboxId);
+    let labelElement = document.getElementById(labelId);
+    let deleteButton = document.querySelector("button");
+    if(deleteButton){
+        labelElement.removeChild(labelElement);
+    }
+}
+
 

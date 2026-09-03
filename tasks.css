@@ -101,3 +101,15 @@
 .delete-icon{
     padding:15px;
 }
+
+.button {
+    padding:0px;
+    margin:0px;
+    border:none; 
+    background-color:transparent;
+    cursor:pointer;   
+}
+
+.checked {
+    text-decoration: line-through;
+}
