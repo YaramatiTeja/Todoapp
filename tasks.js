@@ -78,7 +78,7 @@ function createandAppendTodo(task){
     });
 
     deleteButton.addEventListener("click",function(){
-        deleteTask(checkbox.id,labelElement.id);
+        deleteTask(todoItem);
     });
 
     taskList.appendChild(todoItem);
@@ -102,13 +102,8 @@ function strikeThroughTask(checkboxId,labelId){
     }
 }
 
-function deleteTask(checkboxId,labelId){
-    let checkbox = document.getElementById(checkboxId);
-    let labelElement = document.getElementById(labelId);
-    let deleteButton = document.querySelector("button");
-    if(deleteButton){
-        labelElement.removeChild(labelElement);
-    }
+function deleteTask(todoItem){
+    taskList.removeChild(todoItem);
 }
 
 
