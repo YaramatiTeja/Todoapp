@@ -1,3 +1,4 @@
+let tasksList = [];
 let container = document.createElement("div");
 container.classList.add("container-fluid");
 document.body.appendChild(container);
@@ -48,61 +49,78 @@ taskContainer.appendChild(taskList);
 
 let count = 0;
 let labelCount = 0;
-function createandAppendTodo(task){
-    let todoItem = document.createElement("li");
-    let checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.id = "task-checkbox-" + count;
-    count++;
-    checkbox.classList.add("task-checkbox");
-    todoItem.appendChild(checkbox);
+function createandAppendTodo(todoObject){
+        let todoItem = document.createElement("li");
+        todoItem.id = todoObject.id;
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = "task-checkbox-" + count;
+        count++;
+        checkbox.classList.add("task-checkbox");
+        todoItem.appendChild(checkbox); 
 
-    let labelElement = document.createElement("label");
-    labelElement.textContent = task;
-    labelElement.id = "task-label-" + labelCount;
-    labelCount++;
-    labelElement.classList.add("task-label");
-    labelElement.setAttribute("for", checkbox.id);
-    todoItem.appendChild(labelElement);
-    todoItem.classList.add("task-item");
-    
-    let deleteButton = document.createElement("button");
-    let deleteIcon = document.createElement("i");
-    deleteIcon.classList.add("far","fa-trash-alt","delete-icon");
-    deleteButton.classList.add("delete-icon","button");
-    deleteButton.appendChild(deleteIcon);
-    todoItem.appendChild(deleteButton);
+        let labelElement = document.createElement("label");
+        labelElement.textContent = todoObject.task;
+        labelElement.id = "task-label-" + labelCount;
+        labelCount++;
+        labelElement.classList.add("task-label");
+        labelElement.setAttribute("for", checkbox.id);
+        todoItem.appendChild(labelElement);
+        todoItem.classList.add("task-item");
+        
+        let deleteButton = document.createElement("button");
+        let deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("far","fa-trash-alt","delete-icon");
+        deleteButton.classList.add("delete-icon","button");
+        deleteButton.appendChild(deleteIcon);
+        todoItem.appendChild(deleteButton);
 
-     checkbox.addEventListener("click",function(){
-        strikeThroughTask(checkbox.id,labelElement.id);
-    });
+        checkbox.addEventListener("click",function(){
+            strikeThroughTask(checkbox.id,labelElement.id);
+        });
 
-    deleteButton.addEventListener("click",function(){
-        deleteTask(todoItem);
-    });
+        deleteButton.addEventListener("click",function(){
+            deleteTask(todoItem);
+        });
 
-    taskList.appendChild(todoItem);
-    taskInput.value = "";
+        taskList.appendChild(todoItem);
+        taskInput.value = "";
+    }
+
+for(let i=0;i<tasksList.length;i++){
+    createandAppendTodo(tasksList[i]);
 }
 
 
 buttonElement.addEventListener("click",function(){
-    createandAppendTodo(taskInput.value);
+    let todoObject = {
+            id:"task-"+count,
+            task:taskInput.value,
+            isCompleted:false
+        }
+        if(todoObject.task === ""){
+        alert("Please enter a task");
+        return;
+        }
+        tasksList.push(todoObject);
+    createandAppendTodo(todoObject);
 });
 
-
-function strikeThroughTask(checkboxId,labelId){
+function strikeThroughTask(checkboxId,labelId,todoObject){
     let checkbox = document.getElementById(checkboxId);
     let labelElement = document.getElementById(labelId);
     if(checkbox.checked){
         labelElement.classList.add("checked");  
+        todoObject.isCompleted = true;
     }
     else {
         labelElement.classList.remove("checked");
+        todoObject.isCompleted = false;
     }
 }
 
 function deleteTask(todoItem){
+    tasksList = tasksList.filter(task => task.id !== todoItem.id);
     taskList.removeChild(todoItem);
 }
 
